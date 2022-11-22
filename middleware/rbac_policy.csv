@@ -1,0 +1,6 @@
+p, admin, data, GET
+p, admin, data, POST
+p, user, data, GET
+g, thomas, admin
+g, jim, user
+p, superAdmin, project, read

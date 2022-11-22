@@ -1,0 +1,20 @@
+2022-11-22T13:46:13.467+0800	INFO	middleware/rbac.go:15	RBAC test start
+2022-11-22T13:48:50.690+0800	INFO	middleware/rbac.go:15	RBAC test start
+2022-11-22T13:50:30.546+0800	INFO	middleware/rbac.go:16	RBAC test start
+2022-11-22T13:50:54.831+0800	INFO	middleware/rbac.go:16	RBAC test start
+2022-11-22T13:52:41.657+0800	INFO	middleware/rbac.go:16	RBAC test start
+2022-11-22T13:53:05.395+0800	INFO	middleware/rbac.go:16	RBAC test start
+2022-11-22T13:53:40.988+0800	INFO	middleware/rbac.go:15	RBAC test start
+2022-11-22T13:53:41.032+0800	INFO	middleware/rbac.go:22	admin can use this API
+2022-11-22T13:58:51.918+0800	INFO	middleware/rbac.go:15	RBAC start
+2022-11-22T13:58:51.960+0800	INFO	middleware/rbac.go:17	admin can use this API
+2022-11-22T15:08:36.749+0800	INFO	middleware/rbac.go:15	RBAC start
+2022-11-22T15:08:36.794+0800	INFO	middleware/rbac.go:18	admin can use this API
+2022-11-22T15:12:19.956+0800	INFO	middleware/rbac.go:15	RBAC start
+2022-11-22T15:12:20.006+0800	INFO	middleware/rbac.go:19	admin can use this API
+2022-11-22T15:12:28.041+0800	INFO	middleware/rbac.go:15	RBAC start
+2022-11-22T15:12:28.087+0800	ERROR	middleware/rbac.go:21	ERROR: admin can not read project
+2022-11-22T15:46:16.177+0800	INFO	middleware/rbac.go:24	D:\GinCasbin\middleware
+2022-11-22T15:57:33.213+0800	INFO	middleware/rbac.go:24	D:\GinCasbin\middleware
+2022-11-22T15:57:33.253+0800	INFO	middleware/rbac.go:41	RBAC start
+2022-11-22T15:57:33.253+0800	INFO	middleware/rbac.go:45	admin can use this API
