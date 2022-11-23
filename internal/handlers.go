@@ -25,7 +25,7 @@ func FinishReturnResult(c *gin.Context, result interface{}) {
 	return
 }
 
-func HellowWorldHandler(c *gin.Context) {
+func HelloWorldHandler(c *gin.Context) {
 	FinishReturnResult(c, "Hello World!")
 }
 
@@ -68,14 +68,52 @@ func GetDataHandler(c *gin.Context) {
 	id, _ := c.Params.Get("id")
 	account, ok := c.Get("account")
 	if !ok {
+		Logger.Error("account not found")
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"status": "fail",
 			"msg":    "get account error",
 		})
+		return
 	}
-	Logger.Infof("account:%s", account)
+	token, err := GenToken(account.(string))
+	if err != nil {
+		Logger.Error(err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": "fail",
+			"msg":    "generate token error",
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"status": "ok",
 		"id":     id,
+		"token":  token,
+	})
+}
+
+func POSTDataHandler(c *gin.Context) {
+	account, ok := c.Get("account")
+	if !ok {
+		Logger.Error("account not found")
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": "fail",
+			"msg":    "get account error",
+		})
+		return
+	}
+	token, err := GenToken(account.(string))
+	if err != nil {
+		Logger.Error(err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": "fail",
+			"msg":    "generate token error",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": "ok",
+		"token":  token,
 	})
 }

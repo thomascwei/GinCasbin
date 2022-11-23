@@ -6,6 +6,7 @@ require (
 	github.com/casbin/casbin v1.9.1
 	github.com/gin-gonic/gin v1.8.1
 	github.com/golang-jwt/jwt/v4 v4.4.2
+	github.com/juju/ratelimit v1.0.2
 	github.com/stretchr/testify v1.8.0
 	github.com/thomascwei/golang_logger v0.0.0-20220907014407-31e718894486
 )

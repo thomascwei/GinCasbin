@@ -3,17 +3,13 @@ package middleware
 import (
 	"github.com/casbin/casbin"
 	"github.com/gin-gonic/gin"
-	selfLogger "github.com/thomascwei/golang_logger"
 	"net/http"
 	"os"
 	"path/filepath"
+	"time"
 )
 
-var (
-	// Logger create main.log
-	Logger   = selfLogger.InitLogger("middleware")
-	Enforcer *casbin.Enforcer
-)
+var ABACEnforcer *casbin.Enforcer
 
 func init() {
 	pwd, err := os.Getwd()
@@ -22,7 +18,7 @@ func init() {
 	}
 
 	Logger.Info(pwd)
-	model := "rbac_model.conf"
+	model := "abac_model.conf"
 	csv := "rbac_policy.csv"
 	modelPath := filepath.Join(pwd, model)
 	csvPath := filepath.Join(pwd, csv)
@@ -34,23 +30,25 @@ func init() {
 	if err != nil {
 		csvPath = filepath.Join(pwd, "middleware", csv)
 	}
-	Enforcer = casbin.NewEnforcer(modelPath, csvPath)
+	ABACEnforcer = casbin.NewEnforcer(modelPath, csvPath)
 }
 
-func checkRBAC(sub, obj, act string) bool {
-	Logger.Info("checkRBAC start")
-	//if Enforcer.Enforce("admin", "data", "GET") {
-	allow := Enforcer.Enforce(sub, obj, act)
-	if allow {
-		Logger.Infof("%s can use this API", sub)
+type Subject struct {
+	Name string
+	Hour int
+}
+
+func checkABAC(sub Subject, obj, act string) bool {
+	ok := ABACEnforcer.Enforce(sub, obj, act)
+	if ok {
+		Logger.Infof("%s CAN %s %s at %d:00\n", sub.Name, act, obj, sub.Hour)
 	} else {
-		Logger.Error("ERROR: admin can not read project")
+		Logger.Infof("%s CANNOT %s %s at %d:00\n", sub.Name, act, obj, sub.Hour)
 	}
-	return allow
+	return ok
 }
 
-// RBACAuthorizeMiddleware determines if current user has been authorized to take an action on an object.
-func RBACAuthorizeMiddleware(obj string, act string) gin.HandlerFunc {
+func ABACAuthorizeMiddleware(obj string, act string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Get current user/subject
 		sub, existed := c.Get("account")
@@ -58,8 +56,9 @@ func RBACAuthorizeMiddleware(obj string, act string) gin.HandlerFunc {
 			c.AbortWithStatusJSON(401, gin.H{"msg": "can not find account"})
 			return
 		}
-
-		ok := checkRBAC(sub.(string), obj, act)
+		subStruct := Subject{Name: sub.(string), Hour: time.Now().Hour()}
+		Logger.Infof("%+v", subStruct)
+		ok := checkABAC(subStruct, obj, act)
 		if !ok {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"msg": "You are not authorized"})
 			return

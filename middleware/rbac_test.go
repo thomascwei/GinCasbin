@@ -6,6 +6,6 @@ import (
 )
 
 func TestRBAC(t *testing.T) {
-	result := RBAC("admin", "data", "GET")
+	result := checkRBAC("admin", "data", "GET")
 	require.True(t, result)
 }
